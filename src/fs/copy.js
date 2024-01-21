@@ -25,7 +25,7 @@ const copy = async () => {
 
                 await fs.copyFile(sourceFilePath, copyFilePath);
             }));
-            console.log(`Folder copied successfully:  ${sourceFolder} to ${copyFolder}`);
+            console.log(`Folder copied successfully: ${sourceFolder} to ${copyFolder}`);
         }
     } catch (e) {
         console.error(e.message);
