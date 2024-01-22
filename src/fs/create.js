@@ -1,26 +1,27 @@
+import { writeFile, access, constants } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join, dirname } from 'node:path';
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const fs = require('fs').promises;
-const path = require('path');
+const filePath = join(__dirname, 'files', 'fresh.txt');
+const textContent = 'I am fresh and young';
 
 const create = async () => {
 
-    const textContent = 'I am fresh and young';
-    const filePath = path.join('files', 'fresh.txt');
+  try {
+      await access(filePath, constants.F_OK);
+      throw new Error('FS operation failed: File already exists');
 
-    try {
-        await fs.access(filePath);
-        throw new Error('FS operation failed');
-      } catch (error) {
-        try {
-          await fs.writeFile(filePath, textContent);
+  } catch (error) {
+      try {
+          await writeFile(filePath, textContent);
           console.log('File created successfully:', filePath);
-        } catch (Error) {
-          console.error('Error creating file:', Error);
-        }
+      } catch (err) {
+          console.error('Error creating file:', err.message);
       }
+  }
 };
 
 await create();
