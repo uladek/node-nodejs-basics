@@ -1,29 +1,30 @@
+import { access, constants, mkdir, readdir, copyFile } from 'node:fs/promises';
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const fs = require('fs').promises;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const path = require('path');
+const sourceFolder = join(__dirname, `files`);
+const copyFolder = join(__dirname, `files_copy`);
 
 const copy = async () => {
-    const sourceFolder = 'files';
-    const copyFolder = 'files_copy';
-
     try {
-        await fs.access(sourceFolder);
+        await access(sourceFolder, constants.F_OK);
+
         try {
-            await fs.access(copyFolder);
+            await access(copyFolder, constants.F_OK);
+
             throw new Error('FS operation failed');
         } catch (error) {
-            await fs.mkdir(copyFolder);
+            await mkdir(copyFolder);
 
-            const files = await fs.readdir(sourceFolder);
+            const files = await readdir(sourceFolder);
 
             await Promise.all(files.map(async (file) => {
-                const sourceFilePath = path.join(sourceFolder, file);
-                const copyFilePath = path.join(copyFolder, file);
+                const sourceFilePath = join(sourceFolder, file);
+                const copyFilePath = join(copyFolder, file);
 
-                await fs.copyFile(sourceFilePath, copyFilePath);
+                await copyFile(sourceFilePath, copyFilePath);
             }));
             console.log(`Folder copied successfully: ${sourceFolder} to ${copyFolder}`);
         }
