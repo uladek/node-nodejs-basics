@@ -19,6 +19,8 @@ const read = async () => {
     stream.on('error', (error) => {
       console.error(`Error reading file: ${error.message}`);
     });
+
+    // or stream.pipe(process.stdout);
 };
 
 await read();
