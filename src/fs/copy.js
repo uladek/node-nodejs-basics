@@ -1,4 +1,4 @@
-import { access, constants, mkdir, readdir, copyFile } from 'node:fs/promises';
+import { mkdir, readdir, copyFile } from 'node:fs/promises';
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -9,27 +9,27 @@ const copyFolder = join(__dirname, `files_copy`);
 
 const copy = async () => {
     try {
-        await access(sourceFolder, constants.F_OK);
+        await readdir(sourceFolder);
+        await mkdir(copyFolder);
 
-        try {
-            await access(copyFolder, constants.F_OK);
+        const files = await readdir(sourceFolder);
 
-            throw new Error('FS operation failed');
-        } catch (error) {
-            await mkdir(copyFolder);
+        await Promise.all(files.map(async (file) => {
+            const sourceFilePath = join(sourceFolder, file);
+            const copyFilePath = join(copyFolder, file);
 
-            const files = await readdir(sourceFolder);
+            await copyFile(sourceFilePath, copyFilePath);
+        }));
 
-            await Promise.all(files.map(async (file) => {
-                const sourceFilePath = join(sourceFolder, file);
-                const copyFilePath = join(copyFolder, file);
-
-                await copyFile(sourceFilePath, copyFilePath);
-            }));
-            console.log(`Folder copied successfully: ${sourceFolder} to ${copyFolder}`);
+        console.log(`Folder copied successfully: ${sourceFolder} to ${copyFolder}`);
+    } catch (error) {
+        if (error.code === 'EEXIST') {
+            throw new Error('FS operation failed: copyFolder already exist');
+        } else if (error.code === 'ENOENT') {
+            throw new Error('FS operation failed: source folder does not exist');
+        } else {
+            console.error(error.message);
         }
-    } catch (e) {
-        console.error(e.message);
     }
 };
 
