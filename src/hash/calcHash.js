@@ -6,7 +6,7 @@ import { dirname, join } from "path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const file = join(__dirname, 'files/fileToCalculateHashFor.txt');
 
-const calculateAndLogHash = () => {
+const calculateHash = async () => {
   return new Promise((resolve, reject) => {
     const hash = createHash('sha256');
     const stream = createReadStream(file);
@@ -28,4 +28,4 @@ const calculateAndLogHash = () => {
   });
 };
 
-calculateAndLogHash();
+await calculateHash();
