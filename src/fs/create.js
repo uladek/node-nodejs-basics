@@ -1,4 +1,4 @@
-import { writeFile, access, constants } from 'node:fs/promises';
+import { writeFile} from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 
@@ -10,18 +10,12 @@ const textContent = 'I am fresh and young';
 
 const create = async () => {
 
-  try {
-      await access(filePath, constants.F_OK);
-      throw new Error('FS operation failed: File already exists');
-
-  } catch (error) {
       try {
-          await writeFile(filePath, textContent);
+          await writeFile(filePath, textContent, {flag: "wx"});
           console.log('File created successfully:', filePath);
       } catch (err) {
-          console.error('Error creating file:', err.message);
+          throw new Error('FS operation failed: File already exists');
       }
-  }
 };
 
 await create();
