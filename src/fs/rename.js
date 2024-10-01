@@ -9,14 +9,14 @@ const newNameFile = join(__dirname, 'files/properFilename.md');
 const fileExists = async (filePath) => {
     try {
         await stat(filePath);
+        // check filePath
         return true;
     } catch (error) {
         if (error.code === 'ENOENT') {
+          // (error.code === 'ENOENT')  file or directory does not exist
             return false;
         } else {
-            throw new Error(' FS operation failed: Destination file already exists');
             throw error;
-
         }
     }
 };
@@ -26,6 +26,7 @@ const rename = async () => {
         if (await fileExists(newNameFile)) {
             throw new Error(' FS operation failed: Destination file already exists');
         }
+
         await renameToNewName(oldNameFile, newNameFile);
         console.log(`File renamed successfully: ${oldNameFile} to ${newNameFile}`);
     } catch (error) {

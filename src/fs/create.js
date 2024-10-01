@@ -10,14 +10,14 @@ const textContent = 'I am fresh and young';
 
 
 const create = async () => {
-try {
-   await writeFile(filePath, textContent, { encoding: 'utf8', flag: 'wx' });
-   // { flag: 'wx' } - if file does't exist
-   console.log('File created successfully:', filePath);
+    try {
+        await writeFile(filePath, textContent, { encoding: 'utf8', flag: 'wx' });
+        // { flag: 'wx' } - if file does't exist
+        console.log('File created successfully:', filePath);
 
-  } catch (err) {
+    } catch (err) {
         throw new Error('FS operation failed: File already exists');
-}
+    }
 };
 
 await create();
