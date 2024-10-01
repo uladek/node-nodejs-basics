@@ -1,3 +1,4 @@
+
 import { rename as renameToNewName, stat } from 'node:fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -33,7 +34,8 @@ const rename = async () => {
         if (error.code === 'ENOENT') {
             throw new Error('FS operation failed: Source file does not exist');
         } else {
-            console.error(error.message);
+            throw error;
+            // console.error(error.message);
         }
     }
 };
