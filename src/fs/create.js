@@ -8,14 +8,16 @@ const __dirname = dirname(__filename);
 const filePath = join(__dirname, 'files', 'fresh.txt');
 const textContent = 'I am fresh and young';
 
-const create = async () => {
 
-      try {
-          await writeFile(filePath, textContent, {flag: "wx"});
-          console.log('File created successfully:', filePath);
-      } catch (err) {
-          throw new Error('FS operation failed: File already exists');
-      }
+const create = async () => {
+try {
+   await writeFile(filePath, textContent, { encoding: 'utf8', flag: 'wx' });
+   // { flag: 'wx' } - if file does't exist
+   console.log('File created successfully:', filePath);
+
+  } catch (err) {
+        throw new Error('FS operation failed: File already exists');
+}
 };
 
 await create();
