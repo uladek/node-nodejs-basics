@@ -7,8 +7,8 @@ const transform = async () => {
             const reverse = chunk.toString().split('').reverse().join('');
             callback(null, reverse);
         }
-
     })
+
  return  process.stdin.pipe(reverseTransform).pipe(process.stdout)
 
 };

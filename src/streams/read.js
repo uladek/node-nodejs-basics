@@ -20,6 +20,7 @@ const read = async () => {
   //   stream.on('data', function (chunk) {
   //     console.log(chunk.toString());
   // });
+
     stream.on('error', (error) => {
       console.error(`Error reading file: ${error.message}`);
     });

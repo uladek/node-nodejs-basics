@@ -8,7 +8,6 @@ const fileToWrite = join(__dirname, 'files/fileToWrite.txt');
 const write = async () => {
     const writableStream = createWriteStream(fileToWrite);
 
-
     process.stdin.on("data", (data) => {
         writableStream.write(data);
       });
@@ -18,7 +17,8 @@ const write = async () => {
         writableStream.destroy();
         process.exit(1);
       });
-          // or writableStream.pipe(process.stdin)
+
+      // or    process.stdin.pipe(writableStream);
 };
 
 await write();
